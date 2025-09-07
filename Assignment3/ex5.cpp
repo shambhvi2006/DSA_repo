@@ -9,7 +9,8 @@ int main() {
     vector<int> A(n);
     for (int i = 0; i < n; ++i) cin >> A[i];
 
-    vector<int> C = A; sort(C.begin(), C.end()); // target ascending sequence
+    vector<int> C = A; 
+    sort(C.begin(), C.end()); // target ascending sequence
     stack<int> S;
     int j = 0; // next needed in C
 

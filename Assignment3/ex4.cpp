@@ -11,7 +11,8 @@ int main() {
     stack<int> st; // indices with decreasing T
     for (int i = 0; i < n; ++i) {
         while (!st.empty() && T[i] > T[st.top()]) {
-            int j = st.top(); st.pop();
+            int j = st.top(); 
+            st.pop();
             ans[j] = i - j;
         }
         st.push(i);
