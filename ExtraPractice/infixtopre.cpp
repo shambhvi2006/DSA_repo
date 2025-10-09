@@ -11,14 +11,27 @@ bool isOperator(char c) {
     return (c == '+' || c == '-' || c == '*' || c == '/');
 }
 
-string infixToPostfix(string infix) {
+string infixToPrefix(string infix) {
     stack<char> s;
-    string postfix = "";
+    string reverse = "";
+    for(int i = infix.length()-1; i >= 0; i--) {
+        if(infix[i] == '(') {
+            reverse += ')';
+        }
+        else if(infix[i] == ')') {
+            reverse += '(';
+        }
+        else {
+            reverse += infix[i];
+        }
+    }
+    infix = reverse;
+    string prefix = "";
 
     for(char c : infix) {
-        //agar character hai toh sidha postfix mein daal do
-        if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')|| (c >= '0' && c <= '9')) {
-            postfix += c;
+        //agar character hai toh sidha prefix mein daal do
+        if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
+            prefix += c;
         }
         //opening bracket
         else if(c == '(') {
@@ -29,15 +42,15 @@ string infixToPostfix(string infix) {
 
         else if(c == ')') {
             while(!s.empty() && s.top() != '(') {
-                postfix += s.top();
+                prefix += s.top();
                 s.pop();
             }
             s.pop(); 
         }
         //operator daalo jab tak top wale ki precedence is less than current operator ki precedence
         else if(isOperator(c)) {
-            while(!s.empty() && precedence(s.top()) >= precedence(c)) {
-                postfix += s.top();
+            while(!s.empty() && precedence(s.top()) > precedence(c)) {//##### no equal to =
+                prefix += s.top();
                 s.pop();
             }
             s.push(c);
@@ -45,20 +58,25 @@ string infixToPostfix(string infix) {
     }
 
     while(!s.empty()) {
-        postfix += s.top();
+        prefix += s.top();
         s.pop();
     }
 
-    return postfix;
+    return prefix;
 }
 
 int main() {
     string infix;
     cout << "Enter infix expression: ";
     cin >> infix;
-
-    string postfix = infixToPostfix(infix);
-    cout << "Postfix expression: " << postfix << endl;
+    string prefix = infixToPrefix(infix);
+    int i = 0, j = prefix.length() - 1;
+    while (i < j) {
+        swap(prefix[i], prefix[j]);
+        i++;
+        j--;
+    }
+    cout << "Prefix expression: " << prefix << endl;
 
     return 0;
 }
